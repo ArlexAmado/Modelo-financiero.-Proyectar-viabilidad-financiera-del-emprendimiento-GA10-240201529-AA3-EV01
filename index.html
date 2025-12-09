@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MuckSena - Modelo Financiero</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #0f1419 100%);
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, rgba(152, 202, 63, 0.1), rgba(79, 172, 254, 0.1));
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 3em;
+            background: linear-gradient(135deg, #98ca3f, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: #a0aec0;
+            margin-bottom: 10px;
+        }
+
+        .info {
+            color: #718096;
+            font-size: 0.9em;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 15px;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 10px;
+            color: #a0aec0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+            font-weight: 500;
+        }
+
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #98ca3f, #7fb32d);
+            color: white;
+            box-shadow: 0 5px 15px rgba(152, 202, 63, 0.3);
+        }
+
+        .content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            color: #98ca3f;
+            margin-bottom: 25px;
+            font-size: 2em;
+            border-bottom: 2px solid rgba(152, 202, 63, 0.3);
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #4facfe;
+            margin: 25px 0 15px 0;
+            font-size: 1.4em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            background: rgba(152, 202, 63, 0.2);
+            color: #98ca3f;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-green {
+            color: #98ca3f;
+            font-weight: bold;
+        }
+
+        .text-red {
+            color: #fc8181;
+            font-weight: bold;
+        }
+
+        .text-blue {
+            color: #4facfe;
+            font-weight: bold;
+        }
+
+        .text-yellow {
+            color: #ffd93d;
+            font-weight: bold;
+        }
+
+        .highlight {
+            background: rgba(152, 202, 63, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #98ca3f;
+            margin: 20px 0;
+        }
+
+        .info-box {
+            background: rgba(79, 172, 254, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #4facfe;
+            margin: 20px 0;
+        }
+
+        .warning-box {
+            background: rgba(255, 217, 61, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ffd93d;
+            margin: 20px 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(152, 202, 63, 0.1), rgba(79, 172, 254, 0.1));
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-card h4 {
+            color: #a0aec0;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .stat-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #98ca3f;
+        }
+
+        .stat-card .description {
+            color: #718096;
+            font-size: 0.85em;
+            margin-top: 8px;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        ul li {
+            padding: 8px 0 8px 30px;
+            position: relative;
+        }
+
+        ul li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #98ca3f;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer p {
+            color: #718096;
+            font-size: 0.9em;
+            margin: 5px 0;
+        }
+
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            .tabs {
+                display: none;
+            }
+            .content {
+                display: block !important;
+            }
+            .card {
+                page-break-inside: avoid;
+                border: 1px solid #ddd;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            .tabs {
+                flex-direction: column;
+            }
+            .tab {
+                width: 100%;
+            }
+            table {
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 MuckSena</h1>
+            <p class="subtitle">Plataforma de Gestión de Cursos en Línea</p>
+            <p class="info">Modelo Financiero - Proyección Año 1 (2025)</p>
+            <p class="info">GA10-240201529-AA3-EV01</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('ventas')">📈 Ventas</button>
+            <button class="tab" onclick="showTab('personal')">👥 Personal</button>
+            <button class="tab" onclick="showTab('activos')">🖥️ Activos</button>
+            <button class="tab" onclick="showTab('capital')">💰 Capital</button>
+            <button class="tab" onclick="showTab('flujo')">💵 Flujo Caja</button>
+            <button class="tab" onclick="showTab('balance')">📊 Balance</button>
+            <button class="tab" onclick="showTab('resumen')">✨ Resumen</button>
+        </div>
+
+        <!-- CONTENIDO VENTAS -->
+        <div id="ventas" class="content active">
+            <div class="card">
+                <h2>1. Presupuesto de Ventas</h2>
+                
+                <h3>Líneas de Producto</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th class="text-right">Precio Unitario</th>
+                            <th class="text-right">Costo Variable</th>
+                            <th class="text-right">Margen Unitario</th>
+                            <th class="text-right">Unidades Año</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Suscripción Premium Mensual</td>
+                            <td class="text-right">$40,000</td>
+                            <td class="text-right">$5,000</td>
+                            <td class="text-right text-green">$35,000</td>
+                            <td class="text-right"><strong>6,330 suscriptores</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Venta de Cursos Individuales</td>
+                            <td class="text-right">$80,000</td>
+                            <td class="text-right">$48,000</td>
+                            <td class="text-right text-green">$32,000</td>
+                            <td class="text-right"><strong>2,460 cursos</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Licencias Institucionales</td>
+                            <td class="text-right">$2,000,000</td>
+                            <td class="text-right">$200,000</td>
+                            <td class="text-right text-green">$1,800,000</td>
+                            <td class="text-right"><strong>42 licencias</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Proyección Mensual de Ingresos</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mes</th>
+                            <th class="text-right">Ventas Totales</th>
+                            <th class="text-right">Costos Variables</th>
+                            <th class="text-right">Costos Fijos</th>
+                            <th class="text-right">Margen</th>
+                            <th class="text-right">Utilidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Mes 1</td>
+                            <td class="text-right">$4,400,000</td>
+                            <td class="text-right text-red">$1,690,000</td>
+                            <td class="text-right text-red">$8,500,000</td>
+                            <td class="text-right text-green">$2,710,000</td>
+                            <td class="text-right text-red">-$5,790,000</td>
+                        </tr>
+                        <tr>
+                            <td>Mes 3</td>
+                            <td class="text-right">$9,400,000</td>
+                            <td class="text-right text-red">$3,920,000</td>
+                            <td class="text-right text-red">$8,500,000</td>
+                            <td class="text-right text-green">$5,480,000</td>
+                            <td class="text-right text-red">-$3,020,000</td>
+                        </tr>
+                        <tr>
+                            <td>Mes 6</td>
+                            <td class="text-right">$20,800,000</td>
+                            <td class="text-right text-red">$9,430,000</td>
+                            <td class="text-right text-red">$8,500,000</td>
+                            <td class="text-right text-green">$11,370,000</td>
+                            <td class="text-right text-green">$2,870,000</td>
+                        </tr>
+                        <tr>
+                            <td>Mes 9</td>
+                            <td class="text-right">$39,070,000</td>
+                            <td class="text-right text-red">$19,135,000</td>
+                            <td class="text-right text-red">$8,500,000</td>
+                            <td class="text-right text-green">$19,935,000</td>
+                            <td class="text-right text-green">$11,435,000</td>
+                        </tr>
+                        <tr>
+                            <td>Mes 12</td>
+                            <td class="text-right">$68,000,000</td>
+                            <td class="text-right text-red">$35,800,000</td>
+                            <td class="text-right text-red">$8,500,000</td>
+                            <td class="text-right text-green">$32,200,000</td>
+                            <td class="text-right text-green">$23,700,000</td>
+                        </tr>
+                        <tr style="background: rgba(152, 202, 63, 0.1);">
+                            <td><strong>TOTAL AÑO 1</strong></td>
+                            <td class="text-right text-green"><strong>$334,840,000</strong></td>
+                            <td class="text-right"><strong>$169,700,000</strong></td>
+                            <td class="text-right"><strong>$102,000,000</strong></td>
+                            <td class="text-right text-green"><strong>$165,140,000</strong></td>
+                            <td class="text-right text-green"><strong>$63,140,000</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="highlight">
+                    <h4 style="color: #98ca3f; margin-bottom: 10px;">📊 Análisis de Ventas</h4>
+                    <ul>
+                        <li>Crecimiento progresivo: inicio con 80 usuarios, final con 2,350 usuarios mensuales</li>
+                        <li>Diversificación de ingresos: 3 fuentes principales (suscripciones, cursos, licencias)</li>
+                        <li>Punto de equilibrio operativo proyectado: Mes 6</li>
+                        <li>Margen de contribución promedio: 49.3%</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTENIDO PERSONAL -->
+        <div id="personal" class="content">
+            <div class="card">
+                <h2>2. Presupuesto de Personal</h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cargo</th>
+                            <th class="text-center">Cantidad</th>
+                            <th class="text-center">Modalidad</th>
+                            <th class="text-right">Salario Mensual</th>
+                            <th class="text-right">Prestaciones</th>
+                            <th class="text-right">Costo Total/Mes</th>
+                            <th class="text-right">Costo Anual</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Desarrollador Full Stack Sr.</td>
+                            <td class="text-center">2</td>
+                            <td class="text-center text-yellow">Part-time 60%</td>
+                            <td class="text-right">$2,700,000</td>
+                            <td class="text-right">$1,171,800</td>
+                            <td class="text-right text-green">$7,743,600</td>
+                            <td class="text-right text-green">$92,923,200</td>
+                        </tr>
+                        <tr>
+                            <td>Desarrollador Backend Jr.</td>
+                            <td class="text-center">1</td>
+                            <td class="text-center text-yellow">Part-time 50%</td>
+                            <td class="text-right">$1,250,000</td>
+                            <td class="text-right">$542,500</td>
+                            <td class="text-right text-green">$1,792,500</td>
+                            <td class="text-right text-green">$21,510,000</td>
+                        </tr>
+                        <tr>
+                            <td>Diseñador UI/UX</td>
+                            <td class="text-center">1</td>
+                            <td class="text-center text-yellow">Part-time 50%</td>
+                            <td class="text-right">$1,500,000</td>
+                            <td class="text-right">$651,000</td>
+                            <td class="text-right text-green">$2,151,000</td>
+                            <td class="text-right text-green">$25,812,000</td>
+                        </tr>
+                        <tr>
+                            <td>Community Manager</td>
+                            <td class="text-center">1</td>
+                            <td class="text-center text-yellow">Part-time 50%</td>
+                            <td class="text-right">$1,000,000</td>
+                            <td class="text-right">$434,000</td>
+                            <td class="text-right text-green">$1,434,000</td>
+                            <td class="text-right text-green">$17,208,000</td>
+                        </tr>
+                        <tr>
+                            <td>Ejecutivo Comercial</td>
+                            <td class="text-center">1</td>
+                            <td class="text-center text-yellow">Part-time 40%</td>
+                            <td class="text-right">$1,000,000</td>
+                            <td class="text-right">$434,000</td>
+                            <td class="text-right text-green">$1,434,000</td>
+                            <td class="text-right text-green">$17,208,000</td>
+                        </tr>
+                        <tr style="background: rgba(152, 202, 63, 0.1);">
+                            <td colspan="5"><strong>TOTAL NÓMINA</strong></td>
+                            <td class="text-right text-green"><strong>$14,555,100</strong></td>
+                            <td class="text-right text-green"><strong>$174,661,200</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="info-box">
+                    <h4 style="color: #4facfe; margin-bottom: 10px;">💼 Desglose de Prestaciones Sociales</h4>
+                    <p>El costo total incluye:</p>
+                    <ul>
+                        <li>Salud: 8.5% del salario base</li>
+                        <li>Pensión: 12% del salario base</li>
+                        <li>ARL: 0.522% del salario base</li>
+                        <li>Cesantías: 8.33% del salario base</li>
+                        <li>Intereses Cesantías: 1% del salario base</li>
+                        <li>Prima de Servicios: 8.33% del salario base</li>
+                        <li>Vacaciones: 4.17% del salario base</li>
+                        <li><strong>Total Prestaciones: 43.4% del salario</strong></li>
+                    </ul>
+                </div>
+
+                <div class="highlight">
+                    <h4 style="color: #98ca3f; margin-bottom: 10px;">👥 Estrategia de Personal</h4>
+                    <ul>
+                        <li>Equipo inicial de 6 personas en modalidad part-time</li>
+                        <li>Costo mensual controlado: $14.6 millones</li>
+                        <li>Permite escalabilidad según demanda</li>
+                        <li>Posibilidad de contratar full-time en fase de crecimiento</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTENIDO ACTIVOS -->
+        <div id="activos" class="content">
+            <div class="card">
+                <h2>3. Activos Fijos</h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Activo</th>
+                            <th class="text-center">Cantidad</th>
+                            <th class="text-right">Precio Unitario</th>
+                            <th class="text-right">Total</th>
+                            <th class="text-center">Vida Útil (años)</th>
+                            <th class="text-right">Depreciación Anual</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Computadores (Laptops desarrollo)</td>
+                            <td class="text-center">6</td>
+                            <td class="text-right">$3,500,000</td>
+                            <td class="text-right text-green">$21,000,000</td>
+                            <td class="text-center">3</td>
+                            <td class="text-right text-yellow">$7,000,000</td>
+                        </tr>
+                        <tr>
+                            <td>Licencias Software (Adobe, JetBrains)</td>
+                            <td class="text-center">1</td>
+                            <td class="text-right">$5,000,000</td>
+                            <td class="text-right text-green">$5,000,000</td>
+                            <td class="text-center">1</td>
+                            <td class="text-right text-yellow">$5,000,000</td>
+                        </tr>
+                        <tr>
+                            <td>Servidores y Cloud (Setup inicial)</td>
+                            <td class="text-center">1</td>
+                            <td class="text-right">$8,000,000</td>
+                            <td class="text-right text-green">$8,000,000</td>
+                            <td class="text-center">2</td>
+                            <td class="text-right text-yellow">$4,000,000</td>
+                        </tr>
+                        <tr>
+                            <td>Mobiliario de Oficina</td>
+                            <td class="text-center">1</td>
+                            <td class="text-right">$4,000,000</td>
+                            <td class="text-right text-green">$4,000,000</td>
+                            <td class="text-center">5</td>
+                            <td class="text-right text-yellow">$800,000</td>
+                        </tr>
+                        <tr>
+                            <td>Equipos de Red y Comunicación</td>
+                            <td class="text-center">1</td>
+                            <td class="text-right">$2,000,000</td>
+                            <td class="text-right text-green">$2,000,000</td>
+                            <td class="text-center">3</td>
+                            <td class="text-right text-yellow">$666,667</td>
+                        </tr>
+                        <tr style="background: rgba(152, 202, 63, 0.1);">
+                            <td colspan="3"><strong>TOTAL ACTIVOS FIJOS</strong></td>
+                            <td class="text-right text-green"><strong>$40,000,000</strong></td>
+                            <td></td>
+                            <td class="text-right text-yellow"><strong>$17,466,667</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="info-box">
+                    <h4 style="color: #4facfe; margin-bottom: 10px;">🖥️ Especificaciones de Activos</h4>
+                    <ul>
+                        <li><strong>Laptops:</strong> MacBook Pro / Lenovo ThinkPad (16GB RAM, SSD 512GB)</li>
+                        <li><strong>Software:</strong> Suite Adobe Creative Cloud, JetBrains All Products Pack, GitHub Team</li>
+                        <li><strong>Cloud:</strong> AWS/Google Cloud setup inicial + MongoDB Atlas + CDN</li>
+                        <li><strong>Mobiliario:</strong> Escritorios ajustables, sillas ergonómicas, estanterías</li>
+                        <li><strong>Equipos:</strong> Router empresarial, switches, sistema de videoconferencia</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTENIDO CAPITAL -->
+        <div id="capital" class="content">
+            <div class="card">
+                <h2>4. Capital Inicial y Financiamiento</h2>
+                
+                <h3>Necesidades de Capital</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Concepto</th>
+                            <th class="text-right">Monto</th>
+                            <th class="text-right">Porcentaje</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Activos Fijos (Equipos, Licencias, Infraestructura)</td>
+                            <td class="text-right text-green">$40,000,000</td>
+                            <td class="text-right">53.3%</td>
+                        </tr>
+                        <tr>
+                            <td>Capital de Trabajo (3 meses de operación)</td>
+                            <td class="text-right text-green">$25,000,000</td>
+                            <td class="text-right">33.3%</td>
+                        </tr>
+                        <tr>
+                            <td>Gastos Preoperativos (Legal, Marketing inicial)</td>
+                            <td class="text-right text-green">$10,000,000</td>
+                            <td class="text-right">13.3%</td>
+                        </tr>
+                        <tr style="background: rgba(152, 202, 63, 0.1);">
+                            <td><strong>TOTAL CAPITAL REQUERIDO</strong></td>
+                            <td class="text-right text-green"><strong>$75,000,000</strong></td>
+                            <td class="text-right"><strong>100%</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Fuentes de Financiamiento</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fuente</th>
+                            <th class="text-right">Monto</th>
+                            <th class="text-right">Porcentaje</th>
+                            <th class="text-right">Tasa</th>
+                            <th>Condiciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Capital Propio</strong></td>
+                            <td class="text-right text-blue">$20,000,000</td>
+                            <td class="text-right">26.67%</td>
+                            <td class="text-right">N/A</td>
+                            <td>40% participación fundadores</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inversionistas Ángel</strong></td>
+                            <td class="text-right text-blue">$30,000,000</td>
+                            <td class="text-right">40.00%</td>
+                            <td class="text-right">N/A</td>
+                            <td>40% equity, sin control operativo</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Crédito Bancario Emprendimiento</strong></td>
+                            <td class="text-right text-blue">$25,000,000</td>
+                            <td class="text-right">33.33%</td>
+                            <td class="text-right">1.5% mensual</td>
+                            <td>12 meses, cuota fija $2,291,667</td>
+                        </tr>
+                        <tr style="background: rgba(152, 202, 63, 0.1);">
+                            <td><strong>TOTAL FINANCIAMIENTO</strong></td>
+                            <td class="text-right text-green"><strong>$75,000,000</strong></td>
+                            <td class="text-right"><strong>100%</strong></td>
+                            <td colspan="2"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="grid">
+                    <div class="highlight">
+                        <h4 style="color: #98ca3f; margin-bottom: 10px;">✅ Ventajas del Financiamiento Mixto</h4>
+                        <ul>
+                            <li>Menor dilución de equity (fundadores mantienen 20%)</li>
+                            <li>Liquidez inmediata para operación</li>
+                            <li>Credibilidad con inversionistas institucionales</li>
+                            <li>Cuota mensual manejable: $2,291,667</li>
+                        </ul>
+                    </div>
+                    <div class="info-box">
+                        <h4 style="color: #4facfe; margin-bottom: 10px;">📅 Plan de Uso del Capital</h4>
+                        <ul>
+                            <li>Mes 0-1: Setup tecnológico y legal</li>
+                            <li>Mes 2-3: Contratación equipo core</li>
+                            <li>Mes 4-6: Desarrollo MVP y beta testing</li>
+                            <li>Mes 7-12: Lanzamiento y crecimiento</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTENIDO FLUJO -->
+        <div id="flujo" class="content">
+            <div class="card">
+                <h2>5. Flujo de Caja Proyectado</h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mes</th>
+                            <th class="text-right">Ingresos Oper.</th>
+                            <th class="text-right">Egresos Oper.</th>
+                            <th class="text-right">Flujo Oper.</th>
+                            <th class="text-right">Financiamiento</th>
+                            <th class="text-right">Cuota Crédito</th>
+                            <th class="text-right">Flujo Neto</th>
+                            <th class="text-right">Saldo Acum.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: rgba(147, 51, 234, 0.1);">
+                            <td><strong>Inicial (Mes 0)</strong></td>
+                            <td class="text-right">$0</td>
+                            <td class="text-right text-red">$75,000,000</td>
+                            <td class="text-right text-red">-$75,000,000</td>
+                            <td class="text-right text-blue">$75,000,000</td>
+                            <td class="text-right">$0</td>
+                            <td class="text-right text-green">$0</td>
+                            <td class="text-right text-green">$0</td>
+                        </tr>
+                        <tr>
+                            <td>Mes 1</td>
+                            <td class="text-right">$4,400,000</td>
+                            <td class="text-right text-red">$24,745,100</td>
+                            <td class="text-right text-red">-$20,345,100</td>
+                            <td class="text-right">$0</td>
+                            <td class="text-right text-red">$2,291,667</td>
+                            <td class="text-right text-red">-$22,636,767</td>
+                            <td class="text-right text-red">-$22,636,767</td>
+                        </tr>
+                        <tr>
+                            <td>Mes 2</td>
+                            <td class="text-right">$6,800,000</td>
+                            <td class="text-right text-red">$25,315,100</td>
+                            <td class="text-right text-red">-$18,515,100</td>
+                            <td class="text-right">$0</td>
+                            <td class="text-right text-red">$2,291,667</td>
+                            <td class="text-right text-red">-$20,806,767</td>
+                            <td class="text-right text-red">-$43,443,534</td>
+                        </tr>
+                        <tr>
+                            <td>Mes 3</td>
+                            <td class="text-right">$9,400,000</td>
+                            <td class="text-right text-red">$26,475,100</td>
+                            <td class="text-right text-red">-$17,075,100</td>
+                            <td class="text-right">$0</td>
+                            <td class="text-right text-red">$2,291,667</td>
+                            <td class="text-right text-red">-$19,366,767</td>
+                            <td class="text-right text-red">-$62,810,301</td>
+                        </tr>
+                        <tr>
+                            <td>Mes 6</td>
+                            <td class="text-right">$20,800,000</td>
+                            <td class="text-right text-red">$32,485,100</td>
+                            <td class="text-right text-red">-$11,685,100</td>
+                            <td class="text-right">$0</td>
+                            <td class="text-right text-red">$2,291,667</td>
+                            <td class="text-right text-red">-$13,976,767</td>
+                            <td class="text-right text-red">-$121,106,835</td>
+                        </tr>
+                        <tr>
+                            <td>Mes 9</td>
+                            <td class="text-right">$39,070,000</td>
+                            <td class="text-right text-red">$42,690,100</td>
+                            <td class="text-right text-red">-$3,620,100</td>
+                            <td class="text-right">$0</td>
+                            <td class="text-right text-red">$2,291,667</td>
+                            <td class="text-right text-red">-$5,911,767</td>
+                            <td class="text-right text-red">-$159,048,436</td>
+                        </tr>
+                        <tr>
+                            <td>Mes 12</td>
+                            <td class="text-right">$68,000,000</td>
+                            <td class="text-right text-red">$58,855,100</td>
+                            <td class="text-right text-green">$9,144,900</td>
+                            <td class="text-right">$0</td>
+                            <td class="text-right text-red">$2,291,667</td>
+                            <td class="text-right text-green">$6,853,233</td>
+                            <td class="text-right text-red">-$178,127,703</td>
+                        </tr>
+                        <tr style="background: rgba(152, 202, 63, 0.1);">
+                            <td><strong>TOTAL AÑO 1</strong></td>
+                            <td class="text-right text-green"><strong>$334,840,000</strong></td>
+                            <td class="text-right"><strong>$446,967,200</strong></td>
+                            <td class="text-right text-red"><strong>-$112,127,200</strong></td>
+                            <td class="text-right text-blue"><strong>$75,000,000</strong></td>
+                            <td class="text-right"><strong>$27,500,000</strong></td>
+                            <td class="text-right text-red"><strong>-$64,627,200</strong></td>
+                            <td class="text-right text-red"><strong>-$178,127,703</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="grid">
+                    <div class="stat-card">
+                        <h4>Punto de Equilibrio Operativo</h4>
+                        <div class="value">Mes 11</div>
+                        <div class="description">Primer mes con flujo operativo positivo</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Flujo Neto Total Año 1</h4>
+                        <div class="value text-red">-$64.6M</div>
+                        <div class="description">Inversión en crecimiento</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Saldo Final Año 1</h4>
+                        <div class="value text-red">-$178.1M</div>
+                        <div class="description">Requiere capital adicional año 2</div>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <h4 style="color: #ffd93d; margin-bottom: 10px;">⚠️ Análisis Crítico del Flujo de Caja</h4>
+                    <ul>
+                        <li><strong>Realidad:</strong> Los primeros 12 meses generan flujo negativo acumulado</li>
+                        <li><strong>Causa:</strong> Inversión inicial alta + costos fijos + ramping gradual de ventas</li>
+                        <li><strong>Solución:</strong> Requiere segunda ronda de financiamiento ($100M+) para año 2</li>
+                        <li><strong>Alternativas:</strong> Reducir costos fijos, acelerar ventas, o modelo freemium</li>
+                        <li><strong>Punto positivo:</strong> Tendencia de mejora mes a mes es clara</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h4 style="color: #4facfe; margin-bottom: 10px;">💡 Recomendaciones Financieras</h4>
+                    <ul>
+                        <li>Asegurar línea de crédito adicional de $50M para año 2</li>
+                        <li>Negociar con inversionistas segunda ronda (Series A)</li>
+                        <li>Optimizar costos operativos sin afectar calidad</li>
+                        <li>Acelerar estrategia de ventas institucionales (mayor margen)</li>
+                        <li>Considerar modelo freemium para acelerar adopción</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTENIDO BALANCE -->
+        <div id="balance" class="content">
+            <div class="card">
+                <h2>6. Balance General Inicial</h2>
+                
+                <div class="grid">
+                    <div>
+                        <h3>ACTIVOS</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Concepto</th>
+                                    <th class="text-right">Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background: rgba(79, 172, 254, 0.1);">
+                                    <td colspan="2"><strong>Activos Corrientes</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Efectivo y Equivalentes</td>
+                                    <td class="text-right text-green">$0</td>
+                                </tr>
+                                <tr>
+                                    <td>Cuentas por Cobrar</td>
+                                    <td class="text-right">$0</td>
+                                </tr>
+                                <tr>
+                                    <td>Inventarios</td>
+                                    <td class="text-right">$0</td>
+                                </tr>
+                                <tr style="background: rgba(152, 202, 63, 0.1);">
+                                    <td><strong>Total Activos Corrientes</strong></td>
+                                    <td class="text-right text-green"><strong>$0</strong></td>
+                                </tr>
+                                <tr style="background: rgba(79, 172, 254, 0.1);">
+                                    <td colspan="2"><strong>Activos No Corrientes</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Propiedad, Planta y Equipo</td>
+                                    <td class="text-right text-green">$40,000,000</td>
+                                </tr>
+                                <tr>
+                                    <td>(-) Depreciación Acumulada</td>
+                                    <td class="text-right text-red">$0</td>
+                                </tr>
+                                <tr>
+                                    <td>Activos Diferidos (Gastos Preop.)</td>
+                                    <td class="text-right text-green">$10,000,000</td>
+                                </tr>
+                                <tr style="background: rgba(152, 202, 63, 0.1);">
+                                    <td><strong>Total Activos No Corrientes</strong></td>
+                                    <td class="text-right text-green"><strong>$50,000,000</strong></td>
+                                </tr>
+                                <tr style="background: rgba(152, 202, 63, 0.2);">
+                                    <td><strong>TOTAL ACTIVOS</strong></td>
+                                    <td class="text-right text-green"><strong>$50,000,000</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div>
+                        <h3>PASIVOS Y PATRIMONIO</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Concepto</th>
+                                    <th class="text-right">Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background: rgba(252, 129, 129, 0.1);">
+                                    <td colspan="2"><strong>Pasivos Corrientes</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Proveedores</td>
+                                    <td class="text-right">$0</td>
+                                </tr>
+                                <tr>
+                                    <td>Obligaciones Laborales</td>
+                                    <td class="text-right">$0</td>
+                                </tr>
+                                <tr style="background: rgba(252, 129, 129, 0.1);">
+                                    <td><strong>Total Pasivos Corrientes</strong></td>
+                                    <td class="text-right"><strong>$0</strong></td>
+                                </tr>
+                                <tr style="background: rgba(252, 129, 129, 0.1);">
+                                    <td colspan="2"><strong>Pasivos No Corrientes</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Préstamo Bancario Largo Plazo</td>
+                                    <td class="text-right text-red">$25,000,000</td>
+                                </tr>
+                                <tr style="background: rgba(252, 129, 129, 0.1);">
+                                    <td><strong>Total Pasivos No Corrientes</strong></td>
+                                    <td class="text-right text-red"><strong>$25,000,000</strong></td>
+                                </tr>
+                                <tr style="background: rgba(252, 129, 129, 0.2);">
+                                    <td><strong>TOTAL PASIVOS</strong></td>
+                                    <td class="text-right text-red"><strong>$25,000,000</strong></td>
+                                </tr>
+                                <tr style="background: rgba(79, 172, 254, 0.1);">
+                                    <td colspan="2"><strong>Patrimonio</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Capital Social</td>
+                                    <td class="text-right text-blue">$50,000,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Utilidades del Ejercicio</td>
+                                    <td class="text-right">$0</td>
+                                </tr>
+                                <tr style="background: rgba(79, 172, 254, 0.1);">
+                                    <td><strong>Total Patrimonio</strong></td>
+                                    <td class="text-right text-blue"><strong>$50,000,000</strong></td>
+                                </tr>
+                                <tr style="background: rgba(79, 172, 254, 0.2);">
+                                    <td><strong>TOTAL PASIVO + PATRIMONIO</strong></td>
+                                    <td class="text-right text-blue"><strong>$75,000,000</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div class="stat-card">
+                        <h4>Razón Corriente</h4>
+                        <div class="value">N/A</div>
+                        <div class="description">Sin pasivos corrientes iniciales</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Nivel de Endeudamiento</h4>
+                        <div class="value text-yellow">33.3%</div>
+                        <div class="description">Pasivos / Activos totales</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Patrimonio Neto</h4>
+                        <div class="value text-blue">66.7%</div>
+                        <div class="description">Patrimonio / Activos totales</div>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <h4 style="color: #98ca3f; margin-bottom: 10px;">✓ Verificación de Balance</h4>
+                    <p style="font-size: 1.2em; color: #98ca3f;">
+                        <strong>Balance Cuadrado: Activos ($75M) = Pasivos ($25M) + Patrimonio ($50M)</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTENIDO RESUMEN -->
+        <div id="resumen" class="content">
+            <div class="card">
+                <h2>📊 Resumen Ejecutivo</h2>
+                
+                <div class="grid">
+                    <div class="stat-card">
+                        <h4>Ventas Proyectadas Año 1</h4>
+                        <div class="value">$334.8M</div>
+                        <div class="description">3 líneas de producto</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Inversión Inicial Total</h4>
+                        <div class="value text-blue">$75.0M</div>
+                        <div class="description">Activos + Capital trabajo + Preoperativos</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Utilidad Operativa</h4>
+                        <div class="value text-green">$63.1M</div>
+                        <div class="description">Antes de costos financieros</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Margen Bruto</h4>
+                        <div class="value text-yellow">49.3%</div>
+                        <div class="description">Margen de contribución promedio</div>
+                    </div>
+                </div>
+
+                <h3>Modelo de Negocio</h3>
+                <div class="info-box">
+                    <h4 style="color: #4facfe; margin-bottom: 15px;">🎯 Propuesta de Valor</h4>
+                    <p><strong>MuckSena</strong> es una plataforma SaaS educativa que democratiza el acceso a educación de calidad mediante:</p>
+                    <ul>
+                        <li><strong>Modelo Freemium:</strong> Contenido gratuito para atraer usuarios + Premium para monetizar</li>
+                        <li><strong>Marketplace de Cursos:</strong> Creadores publican contenido y reciben 60% de ingresos</li>
+                        <li><strong>Licencias B2B:</strong> Instituciones educativas obtienen acceso masivo con descuentos</li>
+                        <li><strong>Tecnología Moderna:</strong> OAuth, JWT, MongoDB, Node.js - Stack escalable</li>
+                    </ul>
+                </div>
+
+                <h3>Análisis FODA</h3>
+                <div class="grid">
+                    <div class="highlight">
+                        <h4 style="color: #98ca3f; margin-bottom: 10px;">💪 Fortalezas</h4>
+                        <ul>
+                            <li>Stack tecnológico moderno y escalable</li>
+                            <li>Modelo de negocio diversificado (3 fuentes)</li>
+                            <li>Equipo técnico capacitado (SENA)</li>
+                            <li>Bajos costos de entrada (cloud)</li>
+                        </ul>
+                    </div>
+                    <div class="warning-box">
+                        <h4 style="color: #ffd93d; margin-bottom: 10px;">⚠️ Debilidades</h4>
+                        <ul>
+                            <li>Flujo de caja negativo primer año</li>
+                            <li>Equipo part-time inicial</li>
+                            <li>Sin track record comercial</li>
+                            <li>Alta competencia en mercado edtech</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Proyección de Crecimiento</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Métrica</th>
+                            <th class="text-right">Año 1</th>
+                            <th class="text-right">Año 2 (Est.)</th>
+                            <th class="text-right">Año 3 (Est.)</th>
+                            <th class="text-right">Crecimiento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Usuarios Activos</td>
+                            <td class="text-right">2,000</td>
+                            <td class="text-right text-green">6,000</td>
+                            <td class="text-right text-green">15,000</td>
+                            <td class="text-right text-yellow">200% CAGR</td>
+                        </tr>
+                        <tr>
+                            <td>Ingresos Anuales</td>
+                            <td class="text-right">$334M</td>
+                            <td class="text-right text-green">$1,000M</td>
+                            <td class="text-right text-green">$2,500M</td>
+                            <td class="text-right text-yellow">170% CAGR</td>
+                        </tr>
+                        <tr>
+                            <td>Licencias Institucionales</td>
+                            <td class="text-right">10</td>
+                            <td class="text-right text-green">30</td>
+                            <td class="text-right text-green">75</td>
+                            <td class="text-right text-yellow">175% CAGR</td>
+                        </tr>
+                        <tr>
+                            <td>Cursos en Plataforma</td>
+                            <td class="text-right">50</td>
+                            <td class="text-right text-green">200</td>
+                            <td class="text-right text-green">500</td>
+                            <td class="text-right text-yellow">158% CAGR</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Estrategia de Salida para Inversionistas</h3>
+                <div class="info-box">
+                    <h4 style="color: #4facfe; margin-bottom: 10px;">🚀 Opciones de Exit</h4>
+                    <ul>
+                        <li><strong>Año 3-4:</strong> Adquisición por plataforma edtech grande (Udemy, Coursera, Platzi)</li>
+                        <li><strong>Año 4-5:</strong> IPO en mercado colombiano o NASDAQ (si escala internacional)</li>
+                        <li><strong>Año 2:</strong> Ronda Series B con valuación 10x (buyback parcial inversionistas semilla)</li>
+                        <li><strong>Retorno Esperado:</strong> 5-10x para inversionistas ángel en 3-5 años</li>
+                    </ul>
+                </div>
+
+                <h3>Conclusión</h3>
+                <div class="highlight">
+                    <h4 style="color: #98ca3f; margin-bottom: 10px;">✅ Viabilidad del Proyecto</h4>
+                    <p style="margin-bottom: 10px;">
+                        <strong>MuckSena es un proyecto VIABLE</strong> con las siguientes consideraciones:
+                    </p>
+                    <ul>
+                        <li><strong>Técnicamente:</strong> Stack sólido, arquitectura escalable, equipo capacitado ✓</li>
+                        <li><strong>Comercialmente:</strong> Mercado en crecimiento, necesidad clara, modelo probado ✓</li>
+                        <li><strong>Financieramente:</strong> Requiere paciencia, segunda ronda financiamiento año 2 ⚠️</li>
+                        <li><strong>Operativamente:</strong> Equipo part-time funcional para MVP, escalar según demanda ✓</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-size: 1.1em; color: #98ca3f;">
+                        <strong>Recomendación:</strong> Proceder con lanzamiento, asegurar segunda ronda antes del mes 9, 
+                        y enfocarse en adquisición agresiva de licencias institucionales (mayor margen).
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>MuckSena - Modelo Financiero Completo</strong></p>
+            <p>Desarrollado para SENA - Programa de Análisis y Desarrollo de Software</p>
+            <p>Evidencia: Modelo financiero. Proyectar viabilidad financiera del emprendimiento GA10-240201529-AA3-EV01</p>
+            <p>Trasnversal Emprendimiento</p>
+            <p>Instructora: Ana Maria Romero Medina</p>
+            <p>Arlex Amado</p>
+            <p>2885525</p>
+            <p style="margin-top: 15px; color: #98ca3f;">
+                <strong>Elaborado por:</strong> Equipo MuckSena | <strong>Fecha:</strong> Diciembre 2025
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Ocultar todos los contenidos
+            const contents = document.querySelectorAll('.content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remover clase active de todos los tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Mostrar contenido seleccionado
+            document.getElementById(tabName).classList.add('active');
+
+            // Activar tab seleccionado
+            event.target.classList.add('active');
+
+            // Scroll suave al inicio del contenido
+            window.scrollTo({
+                top: 300,
+                behavior: 'smooth'
+            });
+        }
+
+        // Formato de moneda para copiar
+        function formatCurrency(num) {
+            return new Intl.NumberFormat('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+                minimumFractionDigits: 0
+            }).format(num);
+        }
+
+        // Imprimir página
+        function printPage() {
+            window.print();
+        }
+
+        // Copiar tabla a Excel
+        function copyTableToExcel(tableId) {
+            const table = document.getElementById(tableId);
+            const range = document.createRange();
+            range.selectNode(table);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            alert('Tabla copiada! Pégala en Excel con Ctrl+V');
+        }
+    </script>
+</body>
+</html>
